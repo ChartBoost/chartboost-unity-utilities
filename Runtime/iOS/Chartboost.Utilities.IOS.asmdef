@@ -1,0 +1,21 @@
+{
+    "name": "Chartboost.Utilities.IOS",
+    "rootNamespace": "Chartboost",
+    "references": [
+        "Chartboost.Utilities"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "iOS"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        ""
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using Chartboost.Logging;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -21,43 +22,43 @@ namespace Chartboost.Editor
                 // NuGet
                 Directory.GetDirectories($"Assets/Packages", $"{nuGetPackageName}*").First();
 
-            var packageJson = Directory.GetFiles(packageLocation, "*.json").First();
+            var packageJson = Directory.GetFiles(packageLocation, "package.json").First();
             var nuspec = Directory.GetFiles(packageLocation, "*.nuspec").First();
             
             var upmVersion = GetUnityPackageManagerVersion(packageJson);
             var nugetVersion = GetNuGetVersion(nuspec);
             
-            Debug.Log($"UPM Version : {upmVersion}");
-            Debug.Log($"NuGet Version : {nugetVersion}");
+            LogController.Log($"UPM Version : {upmVersion}", LogLevel.Debug);
+            LogController.Log($"NuGet Version : {nugetVersion}", LogLevel.Debug);
             
             if (codeVersion == null)
                 Assert.AreEqual(upmVersion, nugetVersion);
             else
             {
-                Debug.Log($"Code Version: {codeVersion}");
+                LogController.Log($"Code Version: {codeVersion}", LogLevel.Debug);
                 Assert.AreEqual(upmVersion, nugetVersion, codeVersion);
             }
         }
 
         private static string GetUnityPackageManagerVersion(string filePath)
         {
-            Debug.Log($"UPM path : {filePath}");
+            LogController.Log($"UPM path : {filePath}", LogLevel.Debug);
             try
             {
-                var jsonContent = System.IO.File.ReadAllText(filePath);
+                var jsonContent = File.ReadAllText(filePath);
                 var jsonData = JsonUtility.FromJson<PackageJsonData>(jsonContent);
                 return jsonData.version;
             }
             catch (Exception ex)
             {
-                Debug.LogError($"An error occurred while reading the package.json file: {ex.Message}");
+                LogController.LogException(ex);
                 return null;
             }
         }
 
         private static string GetNuGetVersion(string filePath)
         {
-            Debug.Log($"NuGet path : {filePath}");
+            LogController.Log($"NuGet path : {filePath}", LogLevel.Debug);
             var xmlDoc = new XmlDocument();
             
             try
@@ -83,12 +84,12 @@ namespace Chartboost.Editor
                     return versionNode.InnerText.Trim();
                 }
                 
-                Debug.LogError("Version not found in the .nuspec metadata section.");
+                LogController.LogException(new Exception("Version not found in the .nuspec metadata section."));
                 return null;
             }
             catch (Exception ex)
             {
-                Debug.LogError($"An error occurred while reading the .nuspec file: {ex.Message}");
+                LogController.LogException(ex);
                 return null;
             }
         }
