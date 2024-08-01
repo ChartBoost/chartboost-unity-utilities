@@ -1,7 +1,9 @@
 {
     "name": "Chartboost.Utilities.Editor",
     "rootNamespace": "Chartboost.Editor",
-    "references": [],
+    "references": [
+        "Chartboost.Logging"
+    ],
     "includePlatforms": [
         "Editor"
     ],

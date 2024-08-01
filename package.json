@@ -1,10 +1,9 @@
 {
   "name": "com.chartboost.unity.utilities",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Chartboost Utilities",
   "description": "Reusable Utilities for Chartboost's Unity Projects",
-  "unity": "2020.3",
-  "unityRelease": "27f1",
+  "unity": "2022.3",
   "licensesUrl": "https://answers.chartboost.com/child_article/legal",
   "keywords": [],
   "author": {
@@ -12,5 +11,9 @@
     "email": "sales@chartboost.com",
     "url": "https://www.chartboost.com/mediate"
   },
-  "hideInEditor": false
+  "hideInEditor": false,
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.1",
+    "com.chartboost.unity.logging": "1.0.0"
+  }
 }
