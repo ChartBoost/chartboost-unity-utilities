@@ -1,6 +1,6 @@
 {
   "name": "com.chartboost.unity.utilities",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "displayName": "Chartboost Utilities",
   "description": "Reusable Utilities for Chartboost's Unity Projects",
   "unity": "2022.3",
@@ -14,6 +14,6 @@
   "hideInEditor": false,
   "dependencies": {
     "com.unity.nuget.newtonsoft-json": "3.2.1",
-    "com.chartboost.unity.logging": "1.0.0"
+    "com.chartboost.unity.logging": "1.1.0"
   }
 }

@@ -8,6 +8,11 @@ typedef void (^block)(void);
 /// - Parameter block: block of code to be executed on the main thread.
 void toMain(block block);
 
+/// Creates an id from a C String
+///
+/// - Parameter jsonString: Json string to create id from.
+id toObjectFromJson(const char * jsonString);
+
 /// Creates a null terminated C string on the heap so that our string's memory isn't wiped out right after method's return
 /// 
 /// - Parameter target: Target C string to allocate
@@ -60,6 +65,23 @@ NSMutableArray* toNSMutableArray(const char** cArray, int cArrayCount);
 ///
 /// Use to allocate a C String reference when converting from id serializable.
 ///
-/// - Parameter cString: C String to use as a base for the NSString.
+/// - Parameter data: C String to use as a base for the NSString.
 /// - Returns: Allocated JSON C String or Null.
 const char * toJSON(id data);
+
+
+/// Allocates a JSON  NSString from an id
+///
+/// Use to allocate a NSString reference when converting from id serializable.
+///
+/// - Parameter data: NString to use as a base for the NSString.
+/// - Returns: Allocated JSON NSString or Null.
+NSString * toJSONNSString(id data);
+
+/// Generates a int hashCode from a NSString
+///
+///  Use to obtain a Java like hashCode from a NSString
+///
+///  - Parameter value: Target NSString.
+///  - Returns: int Java like hashCode
+int hashCode(NSString* value);

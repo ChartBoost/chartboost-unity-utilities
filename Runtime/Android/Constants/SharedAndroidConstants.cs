@@ -48,6 +48,7 @@ namespace Chartboost.Constants
         public const string FunctionSet = "set";
         public const string FunctionPut = "put";
         public const string FunctionAdd = "add";
+        public const string FunctionCompleted = "completed";
         
         public const string FunctionGetLogLevel = "getLogLevel";
         public const string FunctionSetLogLevel = "setLogLevel";  

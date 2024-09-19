@@ -1,19 +1,17 @@
 using System.Collections.Generic;
-using System.Linq;
 using Chartboost.Constants;
 using Chartboost.Logging;
 using UnityEngine;
 
 namespace Chartboost
 {
-    public static partial class AndroidExtensions 
+    public static class AndroidExtensions 
     {
         public static AndroidJavaObject DictionaryToMap(this IDictionary<string, string> source)
             => DictionaryToMap(source, SharedAndroidConstants.ClassString);
         
         public static AndroidJavaObject DictionaryToMap(this IReadOnlyDictionary<string, string> source)
             => DictionaryToMap(source, SharedAndroidConstants.ClassString);
-        
         public static AndroidJavaObject DictionaryToMap(this IReadOnlyDictionary<string, bool> source)
             => DictionaryToMap(source, SharedAndroidConstants.ClassBoolean);
 

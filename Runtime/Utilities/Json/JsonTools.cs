@@ -10,10 +10,16 @@ namespace Chartboost.Json
         private const string JsonToolsTag = "[JsonTools]";
         
         public static string SerializeObject<T>(T target, Formatting formatting)
-            => JsonConvert.SerializeObject(target, formatting);
-        
-        public static string SerializeObject<T>(T target) 
-            => SerializeObject(target, Formatting.None);
+        {
+            if (target != null) return JsonConvert.SerializeObject(target, formatting);
+            LogController.Log($"{JsonToolsTag}/SerializeObject string value cannot be null or empty.", LogLevel.Warning);
+            return string.Empty;
+        }
+
+        public static string SerializeObject<T>(T target)
+        {
+            return SerializeObject(target, Formatting.None);
+        }
 
         public static T DeserializeObject<T>(string objectJson)
         {
