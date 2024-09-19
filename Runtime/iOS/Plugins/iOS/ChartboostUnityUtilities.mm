@@ -4,6 +4,17 @@ void toMain(block block) {
     dispatch_async(dispatch_get_main_queue(), block);
 }
 
+id toObjectFromJson(const char * jsonString) {
+    NSData* jsonData = [[NSString stringWithUTF8String:jsonString] dataUsingEncoding:NSUTF8StringEncoding];
+    NSError* error = nil;
+    id arr = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+
+    if (error != nil)
+        return nil;
+
+    return arr;
+}
+
 const char * allocateCString(const char* target)
 {
     if (target == NULL)
@@ -63,6 +74,12 @@ NSMutableArray* toNSMutableArray(const char** cArray, int cArrayCount){
 
 const char * toJSON(id data)
 {
+    return toCStringOrNull(toJSONNSString(data));
+}
+
+
+NSString * toJSONNSString(id data)
+{
     if (data == nil)
         return NULL;
 
@@ -72,6 +89,15 @@ const char * toJSON(id data)
         NSLog(@"%s: error: %@", __func__, error.localizedDescription);
         return NULL;
      }
-    NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    return toCStringOrNull(json);
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+}
+
+int hashCode(NSString* value) {
+    int h = 0;
+
+    for (int i = 0; i < (int)value.length; i++) {
+        h = (31 * h) + [value characterAtIndex:i];
+    }
+
+    return h;
 }

@@ -1,4 +1,4 @@
-# Chartboost Canary Utilities
+# Chartboost Unity Utilities
 
 Simple utilities package for the Chartboost Unity development environment.
 
