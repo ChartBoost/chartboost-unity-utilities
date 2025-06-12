@@ -31,12 +31,13 @@ namespace Chartboost.Editor
             LogController.Log($"UPM Version : {upmVersion}", LogLevel.Debug);
             LogController.Log($"NuGet Version : {nugetVersion}", LogLevel.Debug);
             
-            if (codeVersion == null)
+            if (string.IsNullOrEmpty(codeVersion))
                 Assert.AreEqual(upmVersion, nugetVersion);
             else
             {
                 LogController.Log($"Code Version: {codeVersion}", LogLevel.Debug);
-                Assert.AreEqual(upmVersion, nugetVersion, codeVersion);
+                Assert.AreEqual(upmVersion, nugetVersion);
+                Assert.AreEqual(upmVersion, codeVersion);
             }
         }
 

@@ -8,7 +8,7 @@ This package is meant to be a dependency for other Chartboost Packages; however,
 ## Using the public [npm registry](https://www.npmjs.com/search?q=com.chartboost.unity.utilities)
 ```json
 "dependencies": {
-    "com.chartboost.unity.utilities": "1.0.1",
+    "com.chartboost.unity.utilities": "1.0.3",
     ...
 },
 "scopedRegistries": [

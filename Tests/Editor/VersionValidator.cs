@@ -1,7 +1,7 @@
-using NUnit.Framework;
 using Chartboost.Editor;
+using NUnit.Framework;
 
-namespace Chartboost.Utilities
+namespace Chartboost.Tests.Editor
 {
     public class VersionValidator
     {
