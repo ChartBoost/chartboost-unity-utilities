@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace Chartboost.Core.Utilities
+namespace Chartboost.Generics
 {
     /// <summary>
     /// Interface to make values strongly-typed with help of TypeConverters.

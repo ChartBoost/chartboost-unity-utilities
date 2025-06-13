@@ -1,6 +1,6 @@
 {
   "name": "com.chartboost.unity.utilities",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "displayName": "Chartboost Utilities",
   "description": "Reusable Utilities for Chartboost's Unity Projects",
   "unity": "2022.3",
