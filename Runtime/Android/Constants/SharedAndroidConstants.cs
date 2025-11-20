@@ -23,6 +23,8 @@ namespace Chartboost.Constants
         
         public const string FunctionGetSharedPreferences = "getSharedPreferences";
 
+        public const string PropertyX = "x";
+        public const string PropertyY = "y";
         public const string FunctionSize = "size";
         public const string FunctionToString = "toString";
         public const string FunctionGetValue = "getValue";

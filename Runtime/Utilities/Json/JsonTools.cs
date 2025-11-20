@@ -28,10 +28,18 @@ namespace Chartboost.Json
             LogController.Log($"{JsonToolsTag}/DeserializeObject string value cannot be null or empty.", LogLevel.Warning);
             return default!;
         }
-        
-        public static T? DeserializeNullableObject<T>(string objectJson) where T: struct
+
+        public static T? DeserializeNullableStruct<T>(string objectJson) where T : struct 
         {
             if (!string.IsNullOrEmpty(objectJson)) 
+                return JsonConvert.DeserializeObject<T>(objectJson);
+            LogController.Log($"{JsonToolsTag}/DeserializeNullableObject string value cannot be null or empty.", LogLevel.Warning);
+            return null;
+        }
+        
+        public static T DeserializeNullableObject<T>(string objectJson) where T : class
+        {
+            if (!string.IsNullOrEmpty(objectJson))
                 return JsonConvert.DeserializeObject<T>(objectJson);
             LogController.Log($"{JsonToolsTag}/DeserializeNullableObject string value cannot be null or empty.", LogLevel.Warning);
             return null;

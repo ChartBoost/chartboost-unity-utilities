@@ -1,6 +1,6 @@
 {
   "name": "com.chartboost.unity.utilities",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "displayName": "Chartboost Utilities",
   "description": "Reusable Utilities for Chartboost's Unity Projects",
   "unity": "2022.3",
@@ -15,5 +15,6 @@
   "dependencies": {
     "com.unity.nuget.newtonsoft-json": "3.2.1",
     "com.chartboost.unity.logging": "1.1.0"
-  }
+  },
+  "changelogUrl": "https://github.com/ChartBoost/chartboost-unity-utilities/blob/main/CHANGELOG.md"
 }

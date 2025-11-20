@@ -1,7 +1,18 @@
 #import "ChartboostUnityUtilities.h"
 
 void toMain(block block) {
-    dispatch_async(dispatch_get_main_queue(), block);
+    // Validate block parameter
+    if (!block) {
+        NSLog(@"toMain: block is nil, skipping execution");
+        return;
+    }
+
+    // Execute on main thread
+    if ([NSThread isMainThread]) {
+        block();
+    } else {
+        dispatch_async(dispatch_get_main_queue(), block);
+    }
 }
 
 id toObjectFromJson(const char * jsonString) {

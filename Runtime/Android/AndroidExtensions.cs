@@ -119,8 +119,8 @@ namespace Chartboost
             if (pointF == null)
                 return Vector2.zero;
             
-            var x = pointF.Get<float>("x");
-            var y = pointF.Get<float>("y");
+            var x = pointF.Get<float>(SharedAndroidConstants.PropertyX);
+            var y = pointF.Get<float>(SharedAndroidConstants.PropertyY);
             return new Vector2(x, y);
         }
         
