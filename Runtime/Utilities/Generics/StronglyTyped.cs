@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 
@@ -16,7 +17,7 @@ namespace Chartboost.Generics
         T Value { get; }
     }
 
-    public abstract class StronglyTyped<TInnerType> : IStronglyTyped<TInnerType>
+    public abstract class StronglyTyped<TInnerType> : IStronglyTyped<TInnerType>, IEquatable<StronglyTyped<TInnerType>>
     {
         public TInnerType Value { get; }
 
@@ -24,6 +25,14 @@ namespace Chartboost.Generics
         {
             Value = value;
         }
+
+        /// <summary>Equal when both are the same type with an equal <see cref="Value"/>.</summary>
+        // No == overload: the implicit string conversions would make `key == "a"` ambiguous.
+        public bool Equals(StronglyTyped<TInnerType> other)
+            => other is not null && GetType() == other.GetType() && EqualityComparer<TInnerType>.Default.Equals(Value, other.Value);
+
+        /// <inheritdoc />
+        public override bool Equals(object obj) => Equals(obj as StronglyTyped<TInnerType>);
 
         /// <inheritdoc />
         public override int GetHashCode()
