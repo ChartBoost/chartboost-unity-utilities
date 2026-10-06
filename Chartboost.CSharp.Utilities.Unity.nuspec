@@ -2,16 +2,17 @@
 <package>
   <metadata>
     <id>Chartboost.CSharp.Utilities.Unity</id>
-    <version>1.0.4</version>
+    <version>2.0.0</version>
     <title>Chartboost Utilities for Unity</title>
     <description>Reusable Utilities for Chartboost's Unity Projects</description>
     <authors>Chartboost</authors>
     <owners>Chartboost</owners>
     <license type="file">LICENSE.md</license>
     <readme>README.md</readme>
+    <projectUrl>https://www.chartboost.com</projectUrl>
     <copyright>Copyright 2024</copyright>
-    <tags>Chartboost, Ads, Mediation, Unity, cs</tags>
-    <repository type="git" url="https://github.com/ChartBoost/chartboost-unity-utilities"/>
+    <tags>Chartboost, Unity, Utilities</tags>
+    <repository type="git" url="https://github.com/ChartBoost/chartboost-unity-utilities.git"/>
     <dependencies>
       <dependency id="Chartboost.CSharp.Logging.Unity" version="1.1.0" />
     </dependencies>
