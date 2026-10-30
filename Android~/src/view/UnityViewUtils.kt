@@ -2,7 +2,9 @@
 package com.chartboost.unity.utilities.view
 
 import android.app.Activity
-import android.util.DisplayMetrics
+import android.os.Handler
+import android.os.Looper
+import android.content.res.Resources
 import com.unity3d.player.UnityPlayer
 
 /**
@@ -10,23 +12,26 @@ import com.unity3d.player.UnityPlayer
  * (Mediation, Monetization). Extracted so each bridge stops re-implementing the same accessors.
  */
 object UnityViewUtils {
+    private val mainHandler = Handler(Looper.getMainLooper())
+
+    /** Supplies the current activity; a seam so JVM tests can provide one without Unity. */
+    internal var activityProvider: () -> Activity? = { UnityPlayer.currentActivity }
+
     /** The current Unity activity, or null if unavailable. */
-    fun currentActivity(): Activity? = UnityPlayer.currentActivity
+    fun currentActivity(): Activity? = activityProvider()
 
     /**
-     * Display density (px per dp) of the current activity, or the platform default if the activity
-     * is unavailable. This is the UI scale factor Unity uses to convert dp positions to pixels.
+     * Display density (px per dp): the current activity's, else the system's, which needs no activity.
+     * This is the UI scale factor Unity uses to convert dp positions to pixels.
      */
-    fun displayDensity(): Float {
-        val activity = currentActivity() ?: return DisplayMetrics.DENSITY_DEFAULT.toFloat()
-        return activity.resources?.displayMetrics?.density ?: DisplayMetrics.DENSITY_DEFAULT.toFloat()
-    }
+    fun displayDensity(): Float =
+        currentActivity()?.resources?.displayMetrics?.density ?: Resources.getSystem().displayMetrics.density
 
     /**
-     * Runs [block] on the Android UI thread. Unity's main thread is NOT the Android UI thread, so any
-     * View mutation crossing the JNI boundary must be dispatched here. No-op if no activity is available.
+     * Runs [block] on the Android UI thread: inline when already there, otherwise posted in call order.
+     * Unity's main thread is NOT the Android UI thread, so any View mutation crossing JNI goes through here.
      */
     fun runOnUiThread(block: () -> Unit) {
-        currentActivity()?.runOnUiThread { block() }
+        if (Looper.myLooper() == Looper.getMainLooper()) block() else mainHandler.post(block)
     }
 }

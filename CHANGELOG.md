@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file using the standards as defined at [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0).
 
+### Version 2.1.0 *(2026-10-30)*
+
+### Added
+- `Chartboost.Banners.NativeBannerContainer`: a shared native host for an SDK banner view (placement, safe area, size, alignment, visibility, drag, hosting); the SDK view never changes parent. Android: `BannerContainer`, wrapped with `AndroidBannerContainers.Wrap`; iOS: `CBUBannerContainer`, wrapped with `IOSBannerContainers.Wrap`.
+- `TestWait.Until(condition, what, timeoutSeconds = TestWait.DefaultTimeoutSeconds)`: fails the test with "<what> didn't happen in <timeout>s" on timeout.
+
+### Deprecated
+- Android `BannerHost`, `BannerLayout` and `IBannerDragListener`: use `BannerContainer` and `IBannerContainerListener`. Removed in 3.0.0.
+
+### Fixed
+- iOS marshaling helpers no longer crash on a NULL JSON string (`toObjectFromJson`), a NULL array entry (`toNSMutableArray`), or a value JSON can't represent (`toJSON` now returns NULL).
+- Android: `UnityViewUtils.displayDensity()` without an activity returns the system density instead of 160 (`DENSITY_DEFAULT`, a dpi value).
+
 ### Version 2.0.0 *(2026-10-06)*
 
 ### Added

@@ -7,6 +7,7 @@ package com.chartboost.unity.utilities.banner
  * to its SDK-specific banner listener with additional context. Shared across the Chartboost Unity
  * wrappers.
  */
+@Deprecated("Use IBannerContainerListener; removed in utilities 3.0.0.")
 interface IBannerDragListener {
 
     /**

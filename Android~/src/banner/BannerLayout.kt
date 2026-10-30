@@ -24,6 +24,8 @@ import kotlin.math.sqrt
  * @param bannerView The banner ad view to be contained
  * @param dragListener Listener to receive drag event callbacks
  */
+@Deprecated("Use BannerContainer; removed in utilities 3.0.0.")
+@Suppress("DEPRECATION") // its own IBannerDragListener
 @SuppressLint("ViewConstructor")
 class BannerLayout(context: Context?, private var bannerView: View?, private var dragListener: IBannerDragListener?) : RelativeLayout(context) {
 

@@ -12,6 +12,14 @@ namespace Chartboost.Tests.Runtime
     {
         private static readonly string[] NoInventory = { "NO_FILL" };
 
+        // Runs a wait, and the waits it yields, to completion without frames.
+        private static void Drain(IEnumerator wait)
+        {
+            while (wait.MoveNext())
+                if (wait.Current is IEnumerator inner)
+                    Drain(inner);
+        }
+
         [UnityTest]
         public IEnumerator UntilReturnsOnceTheConditionHolds()
         {
@@ -32,6 +40,17 @@ namespace Chartboost.Tests.Runtime
             yield return TestWait.Until(() => false, 0.2f);
 
             Assert.GreaterOrEqual(Time.realtimeSinceStartup - start, 0.2f);
+        }
+
+        [Test]
+        public void UntilWithWhatPassesOnceTheConditionHolds()
+            => Assert.DoesNotThrow(() => Drain(TestWait.Until(() => true, "the event", 0f)));
+
+        [Test]
+        public void UntilWithWhatFailsAtTheTimeout()
+        {
+            var failure = Assert.Throws<AssertionException>(() => Drain(TestWait.Until(() => false, "the event", 0f)));
+            StringAssert.Contains("the event didn't happen in 0s", failure.Message);
         }
 
         [Test]
