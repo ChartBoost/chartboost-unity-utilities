@@ -16,6 +16,8 @@ void toMain(block block) {
 }
 
 id toObjectFromJson(const char * jsonString) {
+    if (jsonString == NULL)
+        return nil;
     NSData* jsonData = [[NSString stringWithUTF8String:jsonString] dataUsingEncoding:NSUTF8StringEncoding];
     NSError* error = nil;
     id arr = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
@@ -73,7 +75,7 @@ NSMutableArray* toNSMutableArray(const char** cArray, int cArrayCount){
     if (cArrayCount > 0) {
         for (int x = 0; x < cArrayCount; x++)
         {
-            if(strlen(cArray[x]) > 0)
+            if (cArray[x] != NULL && strlen(cArray[x]) > 0)
                 [retArray addObject:toNSStringOrNull(cArray[x])];
         }
 
@@ -91,7 +93,8 @@ const char * toJSON(id data)
 
 NSString * toJSONNSString(id data)
 {
-    if (data == nil)
+    // dataWithJSONObject throws, rather than failing, on objects JSON can't represent.
+    if (data == nil || ![NSJSONSerialization isValidJSONObject:data])
         return NULL;
 
     NSError *error;

@@ -11,6 +11,7 @@ import android.widget.FrameLayout
  * <c>automation_banner_container</c> overlay slot). Shared by the Chartboost Mediation and
  * Monetization wrappers — the HB-11391 banner-hosting mechanism, generalized to any [View].
  */
+@Deprecated("Use BannerContainer.setHost; removed in utilities 3.0.0.")
 object BannerHost {
     /**
      * Reparents [view] into [host] (no-op when already there), centered, clearing any stale translation
