@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Chartboost.CSharp.Utilities.Unity</id>
-    <version>2.1.0</version>
+    <version>2.2.0</version>
     <title>Chartboost Utilities for Unity</title>
     <description>Reusable Utilities for Chartboost's Unity Projects</description>
     <authors>Chartboost</authors>
@@ -17,4 +17,8 @@
       <dependency id="Chartboost.CSharp.Logging.Unity" version="1.1.0" />
     </dependencies>
   </metadata>
+  <files>
+    <!-- nuget.org rejects the malformed JSON fixtures; their tests stay out too. -->
+    <file src="**" exclude="Tests/Editor/Resources/**;Tests/Editor/Resources.meta;Tests/Editor/JsonParseTests.cs*" />
+  </files>
 </package>

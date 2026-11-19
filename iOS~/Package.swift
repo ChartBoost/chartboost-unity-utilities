@@ -10,11 +10,14 @@ let package = Package(
     products: [
         .library(name: "CBUBannerContainer", targets: ["CBUBannerContainer"]),
         .library(name: "ChartboostUnityUtilities", targets: ["ChartboostUnityUtilities"]),
+        .library(name: "CBAdStore", targets: ["CBAdStore"]),
     ],
     targets: [
         .target(name: "CBUBannerContainer", path: "Sources/CBUBannerContainer"),
         .testTarget(name: "CBUBannerContainerTests", dependencies: ["CBUBannerContainer"], path: "Tests/CBUBannerContainerTests"),
         .target(name: "ChartboostUnityUtilities", path: "Sources/ChartboostUnityUtilities"),
         .testTarget(name: "ChartboostUnityUtilitiesTests", dependencies: ["ChartboostUnityUtilities"], path: "Tests/ChartboostUnityUtilitiesTests"),
+        .target(name: "CBAdStore", path: "Sources/CBAdStore"),
+        .testTarget(name: "CBAdStoreTests", dependencies: ["CBAdStore"], path: "Tests/CBAdStoreTests"),
     ]
 )

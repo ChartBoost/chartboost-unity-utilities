@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Chartboost.Logging;
 
 namespace Chartboost.Caching
@@ -65,6 +66,10 @@ namespace Chartboost.Caching
         /// <summary>
         /// Releases a <typeparamref name="T"/> ad from the cache.
         /// </summary>
+        /// <remarks>
+        /// Removes whatever is tracked under the id. An ad releasing itself should use <see cref="ReleaseAd(long, T)"/>
+        /// instead, since native ids can be reused by a newer ad.
+        /// </remarks>
         /// <param name="uniqueId">Associated unique identifier.</param>
         public static void ReleaseAd(long uniqueId)
         {
@@ -76,12 +81,41 @@ namespace Chartboost.Caching
             => ReleaseAd(uniqueId.ToInt64());
 
         /// <summary>
+        /// Releases the entry for <paramref name="uniqueId"/> unless a different, live ad is tracked under it.
+        /// Native ids can be reused, so an owner that is disposed or finalized late must not remove the entry of a
+        /// newer ad that took over its id. An entry whose ad is already dead is removed, since a finalizing owner
+        /// reads as dead.
+        /// </summary>
+        /// <param name="uniqueId">Associated unique identifier.</param>
+        /// <param name="owner">The ad releasing its entry. A finalizing ad reads as dead, which still counts as its own.</param>
+        public static void ReleaseAd(long uniqueId, T owner)
+        {
+            if (!Ads.TryGetValue(uniqueId, out var entry))
+                return;
+
+            if (entry.TryGetTarget(out var current) && !ReferenceEquals(current, owner))
+                return;
+
+            // Removes only this exact entry (the dictionary compares the weak reference by identity), so a newer
+            // one tracked since the check above survives. TryRemove(KeyValuePair) would do it but needs .NET 5+.
+            var pair = new KeyValuePair<long, WeakReference<T>>(uniqueId, entry);
+            ((ICollection<KeyValuePair<long, WeakReference<T>>>)Ads).Remove(pair);
+        }
+
+        /// <inheritdoc cref="ReleaseAd(long, T)"/>
+        public static void ReleaseAd(IntPtr uniqueId, T owner)
+            => ReleaseAd(uniqueId.ToInt64(), owner);
+
+        /// <summary>
         /// Human-readable snapshot of the cache size, for diagnostics.
         /// </summary>
         public static string CacheInfo() => $"AdCache<{TypeName}>: {Ads.Count} tracked";
 
         /// <summary>Number of tracked entries. Test/diagnostics seam, not part of the public API.</summary>
         internal static int Count => Ads.Count;
+
+        /// <summary>Tracks a raw entry, e.g. one whose ad is already dead. Test-only seam.</summary>
+        internal static void TrackEntryForTesting(long uniqueId, WeakReference<T> entry) => Ads[uniqueId] = entry;
 
         /// <summary>Removes all tracked entries. Test-only seam; production code must not clear the cache.</summary>
         internal static void ClearForTesting() => Ads.Clear();
