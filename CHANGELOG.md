@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file using the standards as defined at [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0).
 
+### Version 2.2.0 *(2026-11-18)*
+
+### Added
+- `AdCache<T>.ReleaseAd(uniqueId, owner)`: releases an entry only if it still belongs to `owner` (or its reference is dead), so a stale ad disposed or finalized late cannot evict a newer ad that reused its id.
+
+### Changed
+- The NuGet package no longer includes `JsonParseTests` or its JSON test fixtures; the UPM package still does.
+
+### Fixed
+- iOS `ApplicationPreferences`: `GetString` no longer returns the caller's own pointer for a null key or crashes on a key holding a number, `GetInt` no longer crashes on a non-number, and `SetString` with a null value removes the key (as on Android) instead of crashing.
+- Android `MapToDictionary` leaking the native entry set, iterator and one entry per element on every call, and `SetToHashSet` leaking its iterator.
+
 ### Version 2.1.0 *(2026-10-30)*
 
 ### Added

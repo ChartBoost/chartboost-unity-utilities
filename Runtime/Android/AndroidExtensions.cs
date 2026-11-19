@@ -41,7 +41,7 @@ namespace Chartboost
             if (source == null)
                 return ret;
             
-            var iter = source.Call<AndroidJavaObject>(SharedAndroidConstants.FunctionIterator);
+            using var iter = source.Call<AndroidJavaObject>(SharedAndroidConstants.FunctionIterator);
             
             while (iter.Call<bool>(SharedAndroidConstants.FunctionHasNext))
             {
@@ -61,11 +61,11 @@ namespace Chartboost
             if (size == 0)
                 return ret;
             
-            var entries = source.Call<AndroidJavaObject>(SharedAndroidConstants.FunctionEntrySet);
-            var iter = entries.Call<AndroidJavaObject>(SharedAndroidConstants.FunctionIterator);
+            using var entries = source.Call<AndroidJavaObject>(SharedAndroidConstants.FunctionEntrySet);
+            using var iter = entries.Call<AndroidJavaObject>(SharedAndroidConstants.FunctionIterator);
 
             do {
-                var entry = iter.Call<AndroidJavaObject>(SharedAndroidConstants.FunctionNext);
+                using var entry = iter.Call<AndroidJavaObject>(SharedAndroidConstants.FunctionNext);
                 var key = entry.Call<string>(SharedAndroidConstants.FunctionGetKey);
                 var value = entry.Call<string>(SharedAndroidConstants.FunctionGetValue);
                 ret[key] = value;

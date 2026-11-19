@@ -65,6 +65,56 @@ namespace Chartboost.Tests
         }
 
         [Test]
+        public void ReleaseByOwnerRemovesItsOwnEntry()
+        {
+            AdCache<DummyAd>.TrackAd(PrimaryId, _ad);
+
+            AdCache<DummyAd>.ReleaseAd(PrimaryId, _ad);
+
+            Assert.IsNull(AdCache<DummyAd>.GetAd(PrimaryId));
+        }
+
+        // A stale ad disposed (or finalized) after a newer one took over its id must not evict the newer entry.
+        [Test]
+        public void ReleaseByAStaleOwnerKeepsTheNewerEntry()
+        {
+            AdCache<DummyAd>.TrackAd(PrimaryId, _ad);
+            AdCache<DummyAd>.TrackAd(PrimaryId, _ad2);
+
+            AdCache<DummyAd>.ReleaseAd(PrimaryId, _ad);
+
+            Assert.AreSame(_ad2, AdCache<DummyAd>.GetAd(PrimaryId));
+        }
+
+        [Test]
+        public void ReleaseByOwnerWithUnknownIdDoesNotThrow()
+            => Assert.DoesNotThrow(() => AdCache<DummyAd>.ReleaseAd(PrimaryId, _ad));
+
+        [Test]
+        public void ReleaseByOwnerByIntPtrBehavesLikeByLong()
+        {
+            AdCache<DummyAd>.TrackAd(PrimaryId, _ad);
+            AdCache<DummyAd>.TrackAd(SecondaryId, _ad2);
+
+            AdCache<DummyAd>.ReleaseAd(new IntPtr(PrimaryId), _ad2);
+            Assert.AreSame(_ad, AdCache<DummyAd>.GetAd(PrimaryId));
+
+            AdCache<DummyAd>.ReleaseAd(new IntPtr(PrimaryId), _ad);
+            Assert.IsNull(AdCache<DummyAd>.GetAd(PrimaryId));
+        }
+
+        // The finalizer case: a finalizing ad reads as dead, so its dead entry is still its own to remove.
+        [Test]
+        public void ReleaseByOwnerRemovesAnEntryWhoseAdIsDead()
+        {
+            AdCache<DummyAd>.TrackEntryForTesting(PrimaryId, new WeakReference<DummyAd>(null));
+
+            AdCache<DummyAd>.ReleaseAd(PrimaryId, _ad);
+
+            Assert.AreEqual(0, AdCache<DummyAd>.Count);
+        }
+
+        [Test]
         public void TrackWithSameIdOverwritesPrevious()
         {
             AdCache<DummyAd>.TrackAd(PrimaryId, _ad);

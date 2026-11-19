@@ -1,6 +1,6 @@
 #import "ChartboostUnityUtilities.h"
 
-static NSString* GetValueFromNSDefaults(const char* key)
+static id GetValueFromNSDefaults(const char* key)
 {
     NSString* nsKey = [NSString stringWithUTF8String:key];
     return [[NSUserDefaults standardUserDefaults] objectForKey:nsKey];
@@ -13,9 +13,9 @@ extern "C" {
         if (key == NULL)
             return defaultValue;
 
-        NSString* value = GetValueFromNSDefaults(key);
+        id value = GetValueFromNSDefaults(key);
 
-        if (value == nil)
+        if (![value respondsToSelector:@selector(intValue)])
             return defaultValue;
 
         return [value intValue];
@@ -23,27 +23,38 @@ extern "C" {
 
     const char* _CBApplicationPreferencesGetString(const char* key, const char* defaultValue) {
 
+        // Unity frees the returned string, so every path returns a copy.
         if (key == NULL)
-            return defaultValue;
+            return allocateCString(defaultValue);
 
-        NSString* value = GetValueFromNSDefaults(key);
+        id value = GetValueFromNSDefaults(key);
 
-        if (value == nil)
+        // A key holding a number (SetInt) reads as the default, not as a string.
+        if (![value isKindOfClass:[NSString class]])
             return allocateCString(defaultValue);
 
         return toCStringOrNull(value);
     }
 
     void _CBApplicationPreferencesSetInt(const char* key, int value) {
+        if (key == NULL)
+            return;
+
         NSString *nsKey = [NSString stringWithUTF8String:key];
         [[NSUserDefaults standardUserDefaults] setInteger:value forKey:nsKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 
     void _CBApplicationPreferencesSetString(const char* key, const char* value) {
+        if (key == NULL)
+            return;
+
+        // A null value removes the key, like Android's SharedPreferences.Editor.putString(key, null).
         NSString *nsKey = [NSString stringWithUTF8String:key];
-        NSString *nsValue = [NSString stringWithUTF8String:value];
-        [[NSUserDefaults standardUserDefaults] setObject:nsValue forKey:nsKey];
+        if (value == NULL)
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:nsKey];
+        else
+            [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithUTF8String:value] forKey:nsKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
